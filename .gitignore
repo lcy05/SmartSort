@@ -1,0 +1,48 @@
+# ---------- Keil MDK 编译产物 ----------
+MDK-ARM/rubish_bin/
+MDK-ARM/Listings/
+MDK-ARM/Objects/
+*.crf
+*.d
+*.o
+*.lst
+*.lnp
+*.htm
+*.dep
+*.axf
+*.hex
+*.bin
+*.map
+*.bak
+*.log
+
+# Keil 用户界面缓存（每个人不同，不上传）
+*.uvguix.*
+
+# CubeMX / 临时文件
+*.mxproject
+*.tmp
+Thumbs.db
+.DS_Store
+
+# ---------- Gradle / Android ----------
+.gradle/
+build/
+local.properties
+
+# Android Studio
+.idea/
+*.iml
+captures/
+
+# Native 构建
+.externalNativeBuild/
+.cxx/
+
+# 签名材料（严禁入库）
+*.jks
+*.keystore
+App/keystore/
+
+# 编辑器
+*.swp
