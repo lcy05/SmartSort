@@ -2,15 +2,13 @@
 
 面向 STM32F103 + ESP8266 智能分类垃圾桶的 Android 客户端。应用通过 Wi-Fi 与设备建立单条 TCP 长连接，读取周期性状态帧并下发开合盖指令，完全适配设备现有固件，**无需修改固件代码**。
 
-![Android](https://img.shields.io/badge/Android-8.0%2B-3DDC84?logo=android\&logoColor=white)
-
-![Kotlin](https://img.shields.io/badge/Kotlin-1.9.24-7F52FF?logo=kotlin\&logoColor=white)
-
-![Compose](https://img.shields.io/badge/Jetpack%20Compose-BOM%202024.06-4285F4?logo=jetpackcompose\&logoColor=white)
-
-![APK](https://img.shields.io/badge/APK-0.89%20MB-0F6E56)
-
-![License](https://img.shields.io/badge/License-MIT-blue)
+<p align="center">
+  <img src="https://img.shields.io/badge/Android-8.0%2B-3DDC84?logo=android&amp;logoColor=white" alt="Android">
+  <img src="https://img.shields.io/badge/Kotlin-1.9.24-7F52FF?logo=kotlin&amp;logoColor=white" alt="Kotlin">
+  <img src="https://img.shields.io/badge/Jetpack%20Compose-BOM%202024.06-4285F4?logo=jetpackcompose&amp;logoColor=white" alt="Compose">
+  <img src="https://img.shields.io/badge/APK-0.89%20MB-0F6E56" alt="APK">
+  <img src="https://img.shields.io/badge/License-MIT-blue" alt="License">
+</p>
 
 ## 界面
 
