@@ -18,8 +18,8 @@
 ## 构建与验证
 
 ```bash
-./gradlew :App:testDebugUnitTest :App:assembleDebug     # 日常验证
-./gradlew :App:testDebugUnitTest :App:assembleRelease   # 确认 R8 与资源裁剪后仍可运行
+./gradlew :app:testDebugUnitTest :app:assembleDebug     # 日常验证
+./gradlew :app:testDebugUnitTest :app:assembleRelease   # 确认 R8 与资源裁剪后仍可运行
 ```
 
 以上命令均在仓库根目录执行。提交前需保证单元测试与两项构建均通过。改动涉及网络、协议或设置持久化时，请在真机上完成一次完整流程验证：连接 → 开盖 → 倒计时 → 保持打开 → 全开 → 全关 → 断开重连。

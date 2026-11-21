@@ -48,26 +48,33 @@
 
 ## 构建
 
-在仓库根目录（包含 `gradlew` 的层级）执行。Gradle 根即仓库根，Android 应用模块为 `App`。
+在仓库根目录（包含 `gradlew` 的层级）执行。Android 应用模块为 `app`。
 
 ```bash
 export JAVA_HOME=/path/to/jdk-17
-./gradlew :App:testDebugUnitTest :App:assembleRelease
+./gradlew :app:testDebugUnitTest :app:assembleRelease
 ```
 
-产物位于 `App/build/outputs/apk/release/SmartSort-v<versionName>.apk`，体积约 0.89 MB。
+产物位于 `app/build/outputs/apk/release/SmartSort-v<versionName>.apk`，体积约 0.89 MB。
 
 开发调试包：
 
 ```bash
-./gradlew :App:assembleDebug
+./gradlew :app:assembleDebug
 ```
 
-> **签名说明**：本地构建若未设置签名环境变量，release 会回退到调试签名，仅供覆盖安装验证。CI 发布流程强制要求 `SMARTSORT_*` 签名 Secrets，缺失时直接失败，不会产出调试签名的发布包。具体变量名见仓库根目录 README。
+> **签名说明**：本地构建若未设置签名环境变量，release 会回退到调试签名，仅供覆盖安装验证。CI 发布流程强制要求以下 Secrets，缺失时直接失败，不会产出调试签名的发布包。
+>
+> | Secret | 内容 |
+> | --- | --- |
+> | `SMARTSORT_KEYSTORE_BASE64` | 密钥库文件的 Base64 |
+> | `SMARTSORT_KEYSTORE_PASSWORD` | 密钥库密码 |
+> | `SMARTSORT_KEY_ALIAS` | 密钥别名 |
+> | `SMARTSORT_KEY_PASSWORD` | 密钥密码 |
 
 ## 发布
 
-版本发布由仓库根 `.github/workflows/android-release.yml` 处理：推送 `v<versionName>` 标签后，工作流校验标签与 `App/build.gradle.kts` 中的 `versionName` 一致，运行单元测试，使用 Secrets 中的密钥签名，生成 SHA-256 校验文件，并依据 `CHANGELOG.md` 创建 GitHub Release。
+版本发布由 `.github/workflows/android-release.yml` 处理：推送 `v<versionName>` 标签后，工作流校验标签与 `app/build.gradle.kts` 中的 `versionName` 一致，运行单元测试，使用 Secrets 中的密钥签名，生成 SHA-256 校验文件，并依据 `CHANGELOG.md` 创建 GitHub Release。
 
 ## 安装与联调
 
@@ -78,7 +85,7 @@ export JAVA_HOME=/path/to/jdk-17
 应用不代为连接 Wi-Fi（该能力需要系统级授权），设置页中的 SSID / 密码字段仅作记录用途，实际连接以系统设置为准。
 
 ```bash
-adb install -r App/build/outputs/apk/release/SmartSort-v<versionName>.apk
+adb install -r app/build/outputs/apk/release/SmartSort-v<versionName>.apk
 ```
 
 ## 通信协议
@@ -93,39 +100,32 @@ adb install -r App/build/outputs/apk/release/SmartSort-v<versionName>.apk
 
 ## 项目结构
 
-仓库根是唯一的 Gradle 根，Android 应用模块位于 `App/`：
-
 ```text
-rubish_bin/
-├── App/                            Android 应用模块（SmartSort）
-│   ├── build.gradle.kts
+SmartSort/
+├── app/                             Android 应用模块
+│   ├── build.gradle.kts             版本号、签名、构建配置
 │   ├── proguard-rules.pro
-│   ├── src/main/
-│   │   ├── AndroidManifest.xml
-│   │   ├── java/com/smartsort/app/
-│   │   │   ├── MainActivity.kt       Compose 入口
-│   │   │   ├── MainViewModel.kt      状态机、倒计时、指令下发、设置提交
-│   │   │   ├── data/                 协议、切帧、连接、持久化与校验
-│   │   │   └── ui/                   主页、设置页、组件与主题
-│   │   ├── res/                      图标与基础资源
-│   │   └── ...
-│   ├── src/test/                    协议与切帧单元测试
-│   ├── docs/
-│   │   ├── protocol.md              设备通信协议
-│   │   ├── architecture.md          架构与关键设计决策
-│   │   ├── design.md                交互与视觉规范
-│   │   └── screenshots/             界面图
-│   ├── README.md
-│   ├── CHANGELOG.md
-│   ├── CONTRIBUTING.md
-│   └── LICENSE
+│   └── src/
+│       ├── main/
+│       │   ├── AndroidManifest.xml
+│       │   ├── java/com/smartsort/app/
+│       │   │   ├── MainActivity.kt       Compose 入口
+│       │   │   ├── MainViewModel.kt      状态机、倒计时、指令下发、设置提交
+│       │   │   ├── data/                 协议、切帧、连接、持久化与校验
+│       │   │   └── ui/                   主页、设置页、组件与主题
+│       │   └── res/                      图标与基础资源
+│       └── test/                     协议与切帧单元测试
+├── docs/
+│   ├── protocol.md                  设备通信协议
+│   ├── architecture.md              架构与关键设计决策
+│   ├── design.md                    交互与视觉规范
+│   └── screenshots/                 界面图
 ├── build.gradle.kts                 插件版本声明
 ├── settings.gradle.kts
 ├── gradle.properties
 ├── gradlew / gradle/                Gradle 8.9 wrapper
 ├── .github/workflows/               持续集成与发布
-├── BSP/ Core/ Drivers/              固件源码
-└── EWARM/ MDK-ARM/                  固件工程
+└── README.md / CHANGELOG.md / CONTRIBUTING.md / LICENSE
 ```
 
 ## 设计要点
@@ -155,6 +155,6 @@ rubish_bin/
 
 [MIT](LICENSE)
 
-## 说明
+## 相关项目
 
-设备固件来自 [harrni/rubish\_bin](https://github.com/harrni/rubish_bin)，`App/` 为与之配套的控制端实现。
+设备固件（STM32F103 + ESP8266）位于 [harrni/rubish\_bin](https://github.com/harrni/rubish_bin)，本仓库是其配套的 Android 控制端，独立构建、独立发布，不包含固件代码。
