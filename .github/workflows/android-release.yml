@@ -101,11 +101,28 @@ jobs:
           echo "ASSET_NAME=${asset}" >> "$GITHUB_ENV"
           ls -lh "$asset" "${asset}.sha256"
 
+      - name: Extract release notes
+        shell: bash
+        run: |
+          # 只取当前版本的段落，避免 Releases 页面堆叠全部历史日志。
+          notes="$RUNNER_TEMP/release-notes.md"
+          awk -v hdr="## [${APP_VERSION}]" '
+            index($0, hdr) == 1 { flag = 1; next }
+            flag && substr($0, 1, 4) == "## [" { exit }
+            flag { print }
+          ' CHANGELOG.md > "$notes"
+          if [ ! -s "$notes" ]; then
+            echo "CHANGELOG 中未找到 ${APP_VERSION} 段落，回退为完整文件" >&2
+            cp CHANGELOG.md "$notes"
+          fi
+          echo "NOTES_PATH=$notes" >> "$GITHUB_ENV"
+          head -6 "$notes"
+
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           name: SmartSort v${{ env.APP_VERSION }}
-          body_path: CHANGELOG.md
+          body_path: ${{ env.NOTES_PATH }}
           files: |
             ${{ env.ASSET_NAME }}
             ${{ env.ASSET_NAME }}.sha256
