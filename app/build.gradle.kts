@@ -3,8 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
-val appVersion = "1.0.0"
-val appVersionCode = 1
+val appVersion = "1.0.1"
+val appVersionCode = 2
 
 // 发布签名：仅从环境变量读取，密钥永不入库。
 // 本地开发未设置这些变量时回退到调试签名，保证 assembleRelease 仍可验证构建。
